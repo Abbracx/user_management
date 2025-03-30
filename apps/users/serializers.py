@@ -1,4 +1,3 @@
-
 from django.contrib.auth import get_user_model
 from django_countries.serializer_fields import CountryField
 from djoser.serializers import UserCreateSerializer
@@ -39,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_last_name(self, obj):
         return obj.last_name.title()
-    
+
     def get_full_name(self, obj):
         return f"{obj.first_name.title()} {obj.last_name.title()}"
 

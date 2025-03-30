@@ -23,7 +23,7 @@ class Profile(TimeStampedModel):
     about_me = models.TextField(
         verbose_name=_("About me"), default="say something about yourself"
     )
-    
+
     profile_photo = models.ImageField(
         verbose_name=_("Profile Photo"), default="/profile_default.png"
     )
@@ -43,6 +43,6 @@ class Profile(TimeStampedModel):
         blank=False,
         null=False,
     )
-    
+
     def __str__(self):
         return f"{self.user.username}'s profile"

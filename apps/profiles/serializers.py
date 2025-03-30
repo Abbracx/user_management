@@ -47,5 +47,5 @@ class UpdateProfileSerializer(serializers.ModelSerializer):
             "about_me",
             "gender",
             "country",
-            "city"
+            "city",
         ]
