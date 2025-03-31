@@ -332,6 +332,5 @@ media_index/media/
 .env
 .envs/*
 
-Makefile
 docker/local/django/rqworker/*
 .qodo
