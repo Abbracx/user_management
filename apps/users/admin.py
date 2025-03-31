@@ -84,5 +84,5 @@ class UserAdmin(BaseUserAdmin):
         self.message_user(request, "Selected accounts have been unlocked.")
     unlock_accounts.short_description = "Unlock selected accounts"
 
-admin.site.unregister(User)
+# admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

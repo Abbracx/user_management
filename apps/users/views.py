@@ -1,4 +1,6 @@
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
@@ -68,3 +70,14 @@ class CustomUsersViewSet(UserViewSet):
 
     lookup_field = "id"
     lookup_url_kwarg = "id"
+
+    def list(self, request, *args, **kwargs):
+        cache_key = f"user_list_{request.query_params}"
+
+        cached_response = cache.get(cache_key)
+        if cached_response:
+            return Response(cached_response, status=status.HTTP_200_OK)
+
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, timeout=settings.CACHE_TIMEOUT)
+        return Response(response.data, status=status.HTTP_200_OK)

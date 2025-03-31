@@ -179,6 +179,16 @@ REST_FRAMEWORK = {
     )
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://redis:6379/0",
+        "KEY_PREFIX": "user_management", 
+    }
+}
+
+CACHE_TIMEOUT = 300
+
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": (
