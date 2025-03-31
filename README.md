@@ -123,6 +123,83 @@ Ensure you have the following installed on your system:
 
 ---
 
+---
+
+## API Endpoints
+
+Below is a list of the key API endpoints available in the application:
+
+### Authentication Endpoints
+- **Login (JWT Token Creation)**:
+  - **URL**: `/api/v1/auth/jwt/create/`
+  - **Method**: `POST`
+  - **Description**: Obtain a JWT access and refresh token.
+  - **Payload**:
+    ```json
+    {
+      "email": "user@example.com",
+      "password": "password123"
+    }
+    ```
+
+- **Refresh Token**:
+  - **URL**: `/api/v1/auth/jwt/refresh/`
+  - **Method**: `POST`
+  - **Description**: Refresh the access token using the refresh token.
+  - **Payload**:
+    ```json
+    {
+      "refresh": "your_refresh_token"
+    }
+    ```
+
+- **Verify Token**:
+  - **URL**: `/api/v1/auth/jwt/verify/`
+  - **Method**: `POST`
+  - **Description**: Verify the validity of a JWT token.
+  - **Payload**:
+    ```json
+    {
+      "token": "your_access_token"
+    }
+    ```
+### User Management Endpoints
+- **List Users**:
+  - **URL**: `/api/v1/auth/users/`
+  - **Method**: `GET`
+  - **Description**: Retrieve a list of all users (requires admin privileges).
+
+- **Retrieve User Details**:
+  - **URL**: `/api/v1/auth/users/{id}/`
+  - **Method**: `GET`
+  - **Description**: Retrieve details of a specific user by ID.
+
+- **Create User**:
+  - **URL**: `/api/v1/auth/users/`
+  - **Method**: `POST`
+  - **Description**: Register a new user.
+  - **Payload**:
+    ```json
+    {
+      "email": "user@example.com",
+      "username": "username",
+      "password": "password123"
+    }
+    ```
+
+- **Update User**:
+  - **URL**: `/api/v1/auth/users/{id}/`
+  - **Method**: `PUT` or `PATCH`
+  - **Description**: Update user details.
+
+- **Delete User**:
+  - **URL**: `/api/v1/auth/users/{id}/`
+  - **Method**: `DELETE`
+  - **Description**: Delete a user by ID.
+
+---
+
+
 ## Running Migrations and Collecting Static Files
 
 1. **Run Migrations**:
