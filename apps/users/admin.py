@@ -20,6 +20,8 @@ class UserAdmin(BaseUserAdmin):
         "last_name",
         "is_staff",
         "is_active",
+        "is_locked",
+        "failed_login_attempts"
     ]
     list_display_links = ["id", "email"]
     list_filter = [
