@@ -1,9 +1,7 @@
 from django.urls import path
-from apps.users.views import (
-    CustomTokenObtainPairView,
-    CustomTokenRefreshView,
-    CustomTokenVerifyView,
-)
+
+from apps.users.views import (CustomTokenObtainPairView,
+                              CustomTokenRefreshView, CustomTokenVerifyView)
 
 app_name = "apps.users"
 

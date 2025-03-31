@@ -1,31 +1,33 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
+from rest_framework import status
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.response import Response
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
 )
-from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.response import Response
-from rest_framework import status
 
 from apps.users.pagination import UserPagination
-
 
 User = get_user_model()
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
-    def post(self, request, *args, **kwargs):
-        
-        response = super().post(request, *args, **kwargs)
 
-        if response.status_code == status.HTTP_200_OK:
-           
-            email = request.data.get("email")
-            try:
-                user = User.objects.get(email=email)
+    def post(self, request, *args, **kwargs):
+
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+
+            if serializer.is_valid():
+                # Check if the user is locked due to too many failed login attempts
+                user = get_object_or_404(User, email=request.data.get("email"))
                 if user.is_locked:
                     return Response(
                         {
@@ -35,21 +37,16 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     )
                 user.failed_login_attempts = 0
                 user.save()
-            except User.DoesNotExist:
-                pass 
-        elif response.status_code == status.HTTP_401_UNAUTHORIZED:
-           
-            email = request.data.get("email")
-            try:
-                user = User.objects.get(email=email)
-                user.failed_login_attempts += 1
-                if user.failed_login_attempts >= 3:
-                    user.is_locked = True
-                user.save()
-            except User.DoesNotExist:
-                pass 
-
-        return response
+                return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            user = get_object_or_404(User, email=request.data.get("email"))
+            user.failed_login_attempts += 1
+            if user.failed_login_attempts >= 3:
+                user.is_locked = True
+            user.save()
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class CustomTokenRefreshView(TokenRefreshView):
