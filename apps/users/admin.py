@@ -77,5 +77,12 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ["email", "username", "first_name", "last_name"]
 
+    actions = ["unlock_accounts"]
 
+    def unlock_accounts(self, request, queryset):
+        queryset.update(is_locked=False, failed_login_attempts=0)
+        self.message_user(request, "Selected accounts have been unlocked.")
+    unlock_accounts.short_description = "Unlock selected accounts"
+
+admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
